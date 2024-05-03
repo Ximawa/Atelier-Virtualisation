@@ -1,21 +1,28 @@
-# GESTION PRODUITS
+# Etape 1
 
-## Prérequis
-Cette application est compatible `PHP5` et a été testée avec une base de données `MySQL 5.7`.
 
-## Installation
-- Copier les fichiers du dossier `www` dans un dossier accessible par le serveur Web.
-- Assurez vous que le dossier `uploads` est accessible en lecture et écriture par le serveur Web : `chmod 777 uploads`
-- Importez la base de données test à partir du dump SQL `database/gestion_produits.sql`.
-- Connectez vous à l'application avec l'url adaptée avec les informations suivantes :
-    - Login : `admin`
-    - Mot de passe : `password`
+## Creation img application php
+```
+docker build -t app_php -f Dockerfile.php .
+```
 
-## Fonctionnalités
-L'application permet de :
-- Lister les produits
-- Afficher la fiche produit en lecture seule
-- Ajouter des produits
-- Modifier les produits
-- Supprimer les produits
-- Pour chaque produit, il est possible d'ajouter autant de photos que nécessaire
+## Creation img bdd mysql
+```
+docker build -t bdd_sql -f Dockerfile.mysql .
+```
+
+## Creation du reseau qui sera utilise par nos container
+```
+docker network create app_bdd_network
+```
+
+## Lancement du container base sur l'img php
+```
+docker run -d -p 80:80 --network app_bdd_network --name container_php app_php
+```
+
+## Lancement du container base sur l'img sql 
+(Besoin de rajouter les variables d'environnment directement dans l'intrustion car soucis sans)
+```
+docker run -d -p 3306:3306 --network app_bdd_network -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=gestion_produits --name container_sql bdd_sql
+```
