@@ -1,0 +1,11 @@
+# Utilisez une image MySQL de base
+FROM mysql:5.7
+
+# Copiez le fichier SQL dans le conteneur
+COPY database/gestion_produits.sql /docker-entrypoint-initdb.d/
+
+# Définissez les variables d'environnement pour le mot de passe root
+ENV MYSQL_ROOT_PASSWORD=root
+
+# Exposez le port 3306 (port par défaut pour MySQL)
+EXPOSE 3306
