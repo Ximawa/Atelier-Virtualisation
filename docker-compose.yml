@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    ports:
+      - "80:80"
+    networks:
+      - app_bdd_network
+    container_name: container_php
+
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gestion_produits
+    networks:
+      - app_bdd_network
+    container_name: container_sql
+
+networks:
+  app_bdd_network:
+    driver: bridge
