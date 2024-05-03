@@ -1,7 +1,9 @@
 # Utilisez une image PHP récente
 FROM php:8.3-apache
 
-RUN docker-php-ext-install mysqli pdo_mysql
+# Installez les pilotes PostgreSQL pour PHP
+RUN apt-get update && apt-get install -y libpq-dev
+RUN docker-php-ext-install pdo_pgsql pgsql
 
 # Copiez les fichiers de votre application dans le conteneur
 COPY www/ /var/www/html/

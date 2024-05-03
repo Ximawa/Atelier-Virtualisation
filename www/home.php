@@ -29,14 +29,14 @@
             </thead>
             <tbody>
                 <?php
-                    $sql = "SELECT * FROM produits ORDER BY PRO_lib ASC";
-                    $res = mysqli_query($link, $sql);
-                    while ($produit = mysqli_fetch_assoc($res)) {
-                        $prix = number_format($produit['PRO_prix'], 2, ',', ' ');
+                    $sql = "SELECT * FROM produits ORDER BY pro_lib ASC";
+                    $res = pg_query($link, $sql);
+                    while ($produit = pg_fetch_assoc($res)) {
+                        $prix = number_format($produit['pro_prix'], 2, ',', ' ');
                         
-                        echo '<tr onClick="goto(\'produit.php?id='.$produit['PRO_id'].'\')">';
-                        echo "<td class=\"text-center\">".$produit['PRO_id']."</td>";
-                        echo "<td>".$produit['PRO_lib']."</td>";
+                        echo '<tr onClick="goto(\'produit.php?id='.$produit['pro_id'].'\')">';
+                        echo "<td class=\"text-center\">".$produit['pro_id']."</td>";
+                        echo "<td>".$produit['pro_lib']."</td>";
                         echo "<td class=\"text-right\">".$prix."&nbsp;€</td>";
                         echo "</tr>";
                     }

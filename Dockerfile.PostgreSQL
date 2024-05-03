@@ -1,0 +1,16 @@
+# Utiliser une image de base PostgreSQL
+FROM postgres:latest
+
+# Exemple de configuration personnalisée (facultatif)
+# COPY ./postgresql.conf /etc/postgresql/postgresql.conf
+
+# Exemple de définition de variables d'environnement
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=password
+ENV POSTGRES_DB=gestion_produits
+
+# Copier le fichier SQL dans le conteneur
+COPY database/gestion_produits.sql /docker-entrypoint-initdb.d/
+
+# Exposez le port 5432 (port par défaut pour PostgreSQL)
+EXPOSE 5432

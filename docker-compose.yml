@@ -12,19 +12,20 @@ services:
       - app_bdd_network
     container_name: container_php
 
-  mysql:
+  postgres:
     build:
       context: .
-      dockerfile: Dockerfile.mysql
-    image: bdd_sql:latest
-    ports:
-      - "3306:3306"
+      dockerfile: Dockerfile.PostgreSQL
+    image: postgres:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: gestion_produits
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: gestion_produits
+    ports:
+      - "5432:5432"
     networks:
       - app_bdd_network
-    container_name: container_sql
+    container_name: container_postgres
 
 networks:
   app_bdd_network:

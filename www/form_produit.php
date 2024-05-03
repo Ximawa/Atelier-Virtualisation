@@ -6,14 +6,14 @@
 
     if (isset($_GET['id'])) {
         $action = "modification";
-        $PRO_id = mysqli_real_escape_string($link,$_GET['id']);
+        $pro_id = pg_escape_string($link,$_GET['id']);
 
-        $sql = "SELECT * FROM produits WHERE PRO_id = $PRO_id";
-        $res = mysqli_query($link,$sql);
-        if (mysqli_num_rows($res) == 0) {
+        $sql = "SELECT * FROM produits WHERE pro_id = $pro_id";
+        $res = pg_query($link,$sql);
+        if (pg_num_rows($res) == 0) {
             header('Location: home.php');
         } else {
-            $produit = mysqli_fetch_assoc($res);
+            $produit = pg_fetch_assoc($res);
         }
     } else {
         $action = "ajout";
@@ -40,41 +40,42 @@
             <?php
                 if ($action == 'modification') {
             ?>
-            <input type="hidden" id="PRO_id" name="PRO_id" value="<?php echo $PRO_id ?>" >
+            <input type="hidden" id="pro_id" name="pro_id" value="<?php echo $pro_id ?>" >
             <?php
                 }
             ?>
 
 
             <div class="form-group">
-                <label for="PRO_lib">Libellé</label>
-                <input type="text" class="form-control" id="PRO_lib" name="PRO_lib" value="<?php echo $produit['PRO_lib'] ?>" required>
+                <label for="pro_lib">Libellé</label>
+                <input type="text" class="form-control" id="pro_lib" name="pro_lib" value="<?php echo isset($produit['pro_lib']) ? $produit['pro_lib'] : '' ?>" required>
+            </div>
             </div>
 
             <div class="form-group">
-                <label for="PRO_description">Description</label>
-                <textarea class="form-control" id="PRO_description" name="PRO_description" rows="10"><?php echo $produit['PRO_description'] ?></textarea>
+                <label for="pro_description">Description</label>
+                <textarea class="form-control" id="pro_description" name="pro_description" rows="10"><?php echo isset($produit['pro_description']) ? $produit['pro_description'] : '' ?></textarea>
             </div>
 
             <div class="form-group">
-                <label for="PRO_prix">Prix (€)</label>
-                <input type="number" class="form-control text-right" id="PRO_prix" name="PRO_prix" value="<?php echo $produit['PRO_prix'] ?>" step="0.01" min="0" required>
+                <label for="pro_prix">Prix (€)</label>
+                <input type="number" class="form-control text-right" id="pro_prix" name="pro_prix" value="<?php echo $produit['pro_prix'] ?>" step="0.01" min="0" required>
             </div>
 
             <div class="form-group">
-                <label for="PRO_ressources">Ressources (images)</label>
+                <label for="pro_ressources">Ressources (images)</label>
 
                 <?php
                     if ($action == 'modification') {
-                        $sql = "SELECT * FROM ressources WHERE PRO_id = $PRO_id";
-                        $res = mysqli_query($link,$sql);
-                        if (mysqli_num_rows($res) > 0) {
+                        $sql = "SELECT * FROM ressources WHERE pro_id = $pro_id";
+                        $res = pg_query($link,$sql);
+                        if (pg_num_rows($res) > 0) {
                             echo "<div>";
-                            while ($ressource = mysqli_fetch_assoc($res)) {
-                                if ($ressource['RE_type'] == 'img') {
+                            while ($ressource = pg_fetch_assoc($res)) {
+                                if ($ressource['re_type'] == 'img') {
                                     echo '<div class="img">';
-                                    echo '<img src="'.$ressource['RE_url'].'" class="img-thumbnail thumb" data-id="'.$ressource['RE_id'].'">';
-                                    echo '<img src="img/trash.svg" class="icon trash" data-id="'.$ressource['RE_id'].'">';
+                                    echo '<img src="'.$ressource['re_url'].'" class="img-thumbnail thumb" data-id="'.$ressource['re_id'].'">';
+                                    echo '<img src="img/trash.svg" class="icon trash" data-id="'.$ressource['re_id'].'">';
                                     echo '</div>';
                                 }
                             }
@@ -83,7 +84,7 @@
                     }
                 ?>
 
-                <input type="file" id="PRO_ressources" name="PRO_ressources[]" multiple class="form-control" accept="image/png, image/jpeg">
+                <input type="file" id="pro_ressources" name="pro_ressources[]" multiple class="form-control" accept="image/png, image/jpeg">
             </div>
 
             <div class="form-group" style="margin-top: 20px;">
@@ -126,12 +127,12 @@
         $('button.delete').click(function() {
             
             if(confirm("Etes-vous sûr de vouloir supprimer ce produit?")) {
-                var PRO_id = $('#PRO_id').val();
+                var pro_id = $('#pro_id').val();
 
                 request = $.ajax({
                     method: "POST",
                     url: "validation.php",
-                    data: { action: 'supprimer_produit', PRO_id: PRO_id }
+                    data: { action: 'supprimer_produit', pro_id: pro_id }
                 }).done(function( msg ) {
                     if (msg == 'OK') {
                         goto('home.php');

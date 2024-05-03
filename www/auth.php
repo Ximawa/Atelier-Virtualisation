@@ -5,16 +5,20 @@
 
         ini_set('display_errors', '1');
 
-        $US_login = mysqli_real_escape_string($link,$_POST['US_login']);
-        $US_password = mysqli_real_escape_string($link,$_POST['US_password']);
+        $US_login = pg_escape_string($link,$_POST['US_login']);
+        $US_password = pg_escape_string($link,$_POST['US_password']);
 
-        $sql = "SELECT * FROM utilisateurs WHERE US_login = '$US_login' AND US_password = SHA2('$US_password', 256)";
-        $res = mysqli_query($link,$sql);
+        $hashed_password = hash('sha256', $US_password);
+
+        $query = "SELECT * FROM utilisateurs WHERE US_login = $1 AND US_password = $2";
+        $result = pg_prepare($link, "login_query", $query);
+
+        $res = pg_execute($link, "login_query", array($US_login, $hashed_password));
         if ($res != false) {
-            if (mysqli_num_rows($res) > 0) {
+            if (pg_num_rows($res) > 0) {
                 // Utilisateur trouvé dans la base
-                $utilisateur = mysqli_fetch_assoc($res);
-                $_SESSION['login'] = $utilisateur['US_login'];
+                $utilisateur = pg_fetch_assoc($res);
+                $_SESSION['login'] = $utilisateur['us_login'];
                 header("Location: home.php");
             } else {
                 header("Location: index.php");

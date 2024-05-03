@@ -7,14 +7,14 @@
     if (!isset($_GET['id']) or $_GET['id'] == '') {
         header('Location: home.php');
     } else {
-        $PRO_id = mysqli_real_escape_string($link,$_GET['id']);
-        $sql = "SELECT * FROM produits WHERE PRO_id = $PRO_id";
-        $res = mysqli_query($link, $sql);
-        if (mysqli_num_rows($res)  == 0) {
+        $pro_id = pg_escape_string($link,$_GET['id']);
+        $sql = "SELECT * FROM produits WHERE pro_id = $pro_id";
+        $res = pg_query($link, $sql);
+        if (pg_num_rows($res)  == 0) {
             header('Location: home.php');
         } else {
-            $produit = mysqli_fetch_assoc($res);
-            $prix = number_format($produit['PRO_prix'],2,',',' ');
+            $produit = pg_fetch_assoc($res);
+            $prix = number_format($produit['pro_prix'],2,',',' ');
         }
     }
 
@@ -34,7 +34,7 @@
     <div class="container">
 
         <h1>
-            <?php echo $produit['PRO_lib']; ?>
+            <?php echo $produit['pro_lib']; ?>
         </h1>
 
         <div class="prix">
@@ -44,15 +44,18 @@
         </div>
 
         <div class="description">
-            <?php echo nl2br($produit['PRO_description']); ?>
+            <?php echo nl2br($produit['pro_description']); ?>
         </div>
         
 
         <?php
-            $sql = "SELECT * FROM ressources WHERE PRO_id = $PRO_id";
-            $res = mysqli_query($link, $sql);
-            if (mysqli_num_rows($res) > 0) {
-                $ressources = mysqli_fetch_all($res,MYSQLI_ASSOC);
+            $sql = "SELECT * FROM ressources WHERE pro_id = $pro_id";
+            $res = pg_query($link, $sql);
+            if (pg_num_rows($res) > 0) {
+                $ressources = array();
+                while ($row = pg_fetch_assoc($res)) {
+                    $ressources[] = $row;
+                }
         ?>
 
 
@@ -61,8 +64,8 @@
 
             <?php
                 foreach($ressources as $ressource) {
-                    if ($ressource['RE_type'] == 'img') {
-                        echo '<img src="'.$ressource['RE_url'].'" class="img-thumbnail thumb" data-id="'.$ressource['RE_id'].'">';
+                    if ($ressource['re_type'] == 'img') {
+                        echo '<img src="'.$ressource['re_url'].'" class="img-thumbnail thumb" data-id="'.$ressource['re_id'].'">';
                     }
                 }
             ?>
@@ -75,7 +78,7 @@
         ?>
 
         <div class="form-group" style="margin-top: 20px;">
-                <button type="button" class="btn btn-warning" onClick="goto('form_produit.php?id=<?php echo $PRO_id ?>')">Modifier</button>
+                <button type="button" class="btn btn-warning" onClick="goto('form_produit.php?id=<?php echo $pro_id ?>')">Modifier</button>
                 <button type="button" class="btn btn-primary" onClick="goto('home.php')">Retour</button>
         </div>
 
