@@ -1,7 +1,6 @@
-# Etape 2
+# Etape 3
 
-
-## Lancement des container via docker compose
+## Build et lancement des container
 ```
 docker-compose up -d --build
 ```

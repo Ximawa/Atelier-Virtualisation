@@ -1,5 +1,5 @@
-# Utilisez une image MySQL de base
-FROM mysql:5.7
+# Utilisez une image MySQL récente
+FROM mysql:8.0
 
 # Copiez le fichier SQL dans le conteneur
 COPY database/gestion_produits.sql /docker-entrypoint-initdb.d/

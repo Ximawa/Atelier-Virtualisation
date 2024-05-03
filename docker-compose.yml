@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.php
+    image: app_php:latest
     ports:
       - "80:80"
     networks:
@@ -15,6 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.mysql
+    image: bdd_sql:latest
     ports:
       - "3306:3306"
     environment:

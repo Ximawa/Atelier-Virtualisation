@@ -1,5 +1,5 @@
-# Utilisez une image PHP de base
-FROM php:5.6-apache
+# Utilisez une image PHP récente
+FROM php:8.3-apache
 
 RUN docker-php-ext-install mysqli pdo_mysql
 
